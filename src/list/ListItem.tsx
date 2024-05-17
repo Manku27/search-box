@@ -3,10 +3,10 @@ import { FilteredResult } from "../types";
 interface Props {
   result: FilteredResult;
   selected: boolean;
-  setSelected: (id: string) => void;
+  selectionCallBack: () => void;
 }
 
-export const ListItem = ({ result, selected, setSelected }: Props) => {
+export const ListItem = ({ result, selected, selectionCallBack }: Props) => {
   return (
     <div
       style={{
@@ -16,8 +16,8 @@ export const ListItem = ({ result, selected, setSelected }: Props) => {
         color: selected ? "#424242" : "",
         borderBottom: "1px solid #ccc",
       }}
-      onClick={() => setSelected(result.id)}
-      onMouseEnter={() => setSelected(result.id)}
+      onClick={selectionCallBack}
+      onMouseEnter={selectionCallBack}
     >
       <div>{result.id}</div>
       <div>{result.name}</div>
