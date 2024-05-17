@@ -5,3 +5,7 @@ export interface Result {
   address: string;
   pincode: string;
 }
+
+export interface FilteredResult extends Result {
+  queryInItems?: string;
+}

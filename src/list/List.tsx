@@ -1,8 +1,8 @@
-import { Result } from "../types";
+import { FilteredResult } from "../types";
 import { ListItem } from "./ListItem";
 
 interface Props {
-  results: Result[];
+  results: FilteredResult[];
 }
 
 export const List = ({ results }: Props) => {

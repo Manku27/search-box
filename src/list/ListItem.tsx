@@ -1,7 +1,7 @@
-import { Result } from "../types";
+import { FilteredResult } from "../types";
 
 interface Props {
-  result: Result;
+  result: FilteredResult;
 }
 
 export const ListItem = ({ result }: Props) => {
@@ -9,6 +9,9 @@ export const ListItem = ({ result }: Props) => {
     <div>
       <div>{result.id}</div>
       <div>{result.name}</div>
+      {result.queryInItems ? (
+        <div>{result.queryInItems} found in items</div>
+      ) : null}
       <div>{result.address + " " + result.pincode}</div>
     </div>
   );
