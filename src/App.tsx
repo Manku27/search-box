@@ -22,15 +22,18 @@ function App() {
 
   const filteredResult = results ? getFilteredResult(results, query) : [];
 
+  let queryResult = null;
+  if (filteredResult.length === 0) {
+    queryResult = <NoResults />;
+  } else {
+    queryResult = <List results={filteredResult} />;
+  }
   return (
     <>
       <h1>Search Box</h1>
       <div>
         <SearchBar setQuery={setQuery} query={query} />
-        {filteredResult && filteredResult.length == 0 ? <NoResults /> : null}
-        {filteredResult && filteredResult.length > 0 ? (
-          <List results={filteredResult} />
-        ) : null}
+        {query ? queryResult : null}
       </div>
     </>
   );

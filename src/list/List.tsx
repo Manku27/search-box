@@ -10,7 +10,7 @@ export const List = ({ results }: Props) => {
   const [selected, setSelected] = useState("");
 
   return (
-    <div style={{ margin: 20 }}>
+    <div className="results-list">
       {results.map((result) => {
         return (
           <ListItem

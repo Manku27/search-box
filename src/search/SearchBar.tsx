@@ -9,12 +9,10 @@ export const SearchBar = ({ query, setQuery }: Props) => {
   };
 
   return (
-    <div className="input-wrapper">
-      <input
-        placeholder="Type to search..."
-        value={query}
-        onChange={(e) => handleChange(e.target.value)}
-      />
-    </div>
+    <input
+      placeholder="Type to search..."
+      value={query}
+      onChange={(e) => handleChange(e.target.value)}
+    />
   );
 };
