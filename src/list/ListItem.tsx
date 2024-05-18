@@ -6,7 +6,6 @@ interface Props {
   selected: boolean;
   selectionCallBack: () => void;
   query: string;
-  refCall: (el: any) => void;
 }
 
 export const ListItem = ({
@@ -14,7 +13,6 @@ export const ListItem = ({
   selected,
   selectionCallBack,
   query,
-  refCall,
 }: Props) => {
   return (
     <div
@@ -27,7 +25,6 @@ export const ListItem = ({
       }}
       onClick={selectionCallBack}
       onMouseEnter={selectionCallBack}
-      ref={refCall}
     >
       <HighlightedSubstring text={result.id} highlight={query} />
       <HighlightedSubstring text={result.name} highlight={query} />

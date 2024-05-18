@@ -10,13 +10,13 @@ interface Props {
 export const List = ({ results, query }: Props) => {
   const [selected, setSelected] = useState<number>(0);
   const [isMouseHover, setIsMouseHover] = useState(false);
-  const listRef: any = useRef([]);
+  const listRef: any = useRef(null);
 
   useEffect(() => {
     // restore pointer visibility
     document.body.style.cursor = "";
     // restore scroll to top
-    listRef.current[0].scrollIntoView({
+    listRef.current?.children[0]?.scrollIntoView({
       behavior: "smooth",
       block: "start",
     });
@@ -38,15 +38,19 @@ export const List = ({ results, query }: Props) => {
       } else if (e.key === "ArrowUp") {
         newIndex = selected > 0 ? selected - 1 : 0;
       }
-      setSelected(newIndex);
 
-      const selectedItem = listRef.current[newIndex];
-      if (selectedItem) {
-        selectedItem.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-        });
-      }
+      const list = listRef.current;
+      const selectedItem = list?.children[newIndex];
+
+      setSelected(() => {
+        if (selectedItem) {
+          selectedItem.scrollIntoView({
+            behavior: "smooth",
+            block: "nearest",
+          });
+        }
+        return newIndex;
+      });
     };
 
     window.addEventListener("keydown", handler);
@@ -59,6 +63,7 @@ export const List = ({ results, query }: Props) => {
   return (
     <div
       className="results-list"
+      ref={listRef}
       onMouseOver={() => {
         setIsMouseHover(true);
       }}
@@ -70,7 +75,6 @@ export const List = ({ results, query }: Props) => {
       {results.map((result, index) => {
         return (
           <ListItem
-            refCall={(el) => (listRef.current[index] = el)}
             result={result}
             selected={selected == index}
             selectionCallBack={() => setSelected(index)}
