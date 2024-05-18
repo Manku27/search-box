@@ -8,23 +8,37 @@ import { getFilteredResult } from "./search/getFilteredResult";
 
 function App() {
   const [results, setResults] = useState<null | Result[]>(null);
+  const [apiState, setApiState] = useState<
+    "NotLoaded" | "Loading" | "Loaded" | "error"
+  >("NotLoaded");
   const [query, setQuery] = useState("");
 
   useEffect(() => {
+    setApiState("Loading");
     fetch(
       "https://fe-take-home-assignment.s3.us-east-2.amazonaws.com/Data.json"
     )
       .then((response) => response.json())
       .then((json) => {
+        setApiState("Loaded");
         setResults(json);
-      });
+      })
+      .catch(() => setApiState("error"));
   }, []);
 
   const filteredResult = results ? getFilteredResult(results, query) : [];
 
   let queryResult = null;
   if (filteredResult.length === 0) {
-    queryResult = <NoResults />;
+    let message = "Will load shortly";
+    if (apiState === "Loading") {
+      message = "Loading...";
+    } else if (apiState === "error") {
+      message = "Sorry! Please check back later.";
+    } else if (apiState === "Loaded") {
+      message = "No results found.";
+    }
+    queryResult = <NoResults text={message} />;
   } else {
     queryResult = <List results={filteredResult} query={query} />;
   }

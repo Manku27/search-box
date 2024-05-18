@@ -1,7 +1,7 @@
-export const NoResults = () => {
+export const NoResults = ({ text }: { text: string }) => {
   return (
     <div className="results-list">
-      <div className="no-result">No User Found</div>
+      <div className="no-result">{text}</div>
     </div>
   );
 };
