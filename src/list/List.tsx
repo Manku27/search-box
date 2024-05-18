@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FilteredResult } from "../types";
 import { ListItem } from "./ListItem";
 
@@ -10,6 +10,7 @@ interface Props {
 export const List = ({ results, query }: Props) => {
   const [selected, setSelected] = useState<number>(0);
   const [isMouseHover, setIsMouseHover] = useState(false);
+  const itemRefs: any = useRef([]);
 
   useEffect(() => {
     document.body.style.cursor = "";
@@ -22,17 +23,23 @@ export const List = ({ results, query }: Props) => {
         document.body.style.cursor = "none";
       }
       if (e.key === "ArrowDown") {
-        console.log("down");
         setSelected((curr) => {
           if (curr >= 0 && curr !== results.length - 1) {
+            itemRefs.current[curr + 1]?.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+            });
             return curr + 1;
           }
           return results.length - 1;
         });
       } else if (e.key === "ArrowUp") {
-        console.log("up");
         setSelected((curr) => {
           if (curr && curr !== 0) {
+            itemRefs.current[curr - 1]?.scrollIntoView({
+              behavior: "smooth",
+              block: "nearest",
+            });
             return curr - 1;
           }
           return 0;
@@ -61,6 +68,7 @@ export const List = ({ results, query }: Props) => {
       {results.map((result, index) => {
         return (
           <ListItem
+            refCall={(el) => (itemRefs.current[index] = el)}
             result={result}
             selected={selected == index}
             selectionCallBack={() => setSelected(index)}
