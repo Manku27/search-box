@@ -10,10 +10,18 @@ interface Props {
 export const List = ({ results, query }: Props) => {
   const [selected, setSelected] = useState<number>(0);
   const [isMouseHover, setIsMouseHover] = useState(false);
-  const itemRefs: any = useRef([]);
+  const listRef: any = useRef([]);
 
   useEffect(() => {
+    // restore pointer visibility
     document.body.style.cursor = "";
+    // restore scroll to top
+    listRef.current[0].scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    // selected to top
+    setSelected(0);
   }, [results]);
 
   useEffect(() => {
@@ -22,27 +30,21 @@ export const List = ({ results, query }: Props) => {
         // hide cursor when hover and navigating via keyboard
         document.body.style.cursor = "none";
       }
+
+      let newIndex = selected;
       if (e.key === "ArrowDown") {
-        setSelected((curr) => {
-          if (curr >= 0 && curr !== results.length - 1) {
-            itemRefs.current[curr + 1]?.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-            });
-            return curr + 1;
-          }
-          return results.length - 1;
-        });
+        newIndex =
+          selected < results.length - 1 ? selected + 1 : results.length - 1;
       } else if (e.key === "ArrowUp") {
-        setSelected((curr) => {
-          if (curr && curr !== 0) {
-            itemRefs.current[curr - 1]?.scrollIntoView({
-              behavior: "smooth",
-              block: "nearest",
-            });
-            return curr - 1;
-          }
-          return 0;
+        newIndex = selected > 0 ? selected - 1 : 0;
+      }
+      setSelected(newIndex);
+
+      const selectedItem = listRef.current[newIndex];
+      if (selectedItem) {
+        selectedItem.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
         });
       }
     };
@@ -52,7 +54,7 @@ export const List = ({ results, query }: Props) => {
     return () => {
       window.removeEventListener("keydown", handler);
     };
-  }, [isMouseHover, results.length]);
+  }, [isMouseHover, results.length, selected]);
 
   return (
     <div
@@ -68,7 +70,7 @@ export const List = ({ results, query }: Props) => {
       {results.map((result, index) => {
         return (
           <ListItem
-            refCall={(el) => (itemRefs.current[index] = el)}
+            refCall={(el) => (listRef.current[index] = el)}
             result={result}
             selected={selected == index}
             selectionCallBack={() => setSelected(index)}
