@@ -11,8 +11,13 @@ export const List = ({ results }: Props) => {
   const [isMouseHover, setIsMouseHover] = useState(false);
 
   useEffect(() => {
+    document.body.style.cursor = "";
+  }, [results]);
+
+  useEffect(() => {
     const handler = (e) => {
       if (isMouseHover) {
+        // hide cursor when hover and navigating via keyboard
         document.body.style.cursor = "none";
       }
       if (e.key === "ArrowDown") {
