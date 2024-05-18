@@ -1,12 +1,19 @@
 import { FilteredResult } from "../types";
+import { HighlightedSubstring } from "./HighlightedSubstring";
 
 interface Props {
   result: FilteredResult;
   selected: boolean;
   selectionCallBack: () => void;
+  query: string;
 }
 
-export const ListItem = ({ result, selected, selectionCallBack }: Props) => {
+export const ListItem = ({
+  result,
+  selected,
+  selectionCallBack,
+  query,
+}: Props) => {
   return (
     <div
       style={{
@@ -19,12 +26,18 @@ export const ListItem = ({ result, selected, selectionCallBack }: Props) => {
       onClick={selectionCallBack}
       onMouseEnter={selectionCallBack}
     >
-      <div>{result.id}</div>
-      <div>{result.name}</div>
+      <HighlightedSubstring text={result.id} highlight={query} />
+      <HighlightedSubstring text={result.name} highlight={query} />
       {result.queryInItems ? (
-        <div>{result.queryInItems} found in items</div>
+        <HighlightedSubstring
+          text={`${result.queryInItems} found in items`}
+          highlight={result.queryInItems}
+        />
       ) : null}
-      <div>{result.address + " " + result.pincode}</div>
+      <HighlightedSubstring
+        text={result.address + " " + result.pincode}
+        highlight={query}
+      />
     </div>
   );
 };

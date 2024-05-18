@@ -4,9 +4,10 @@ import { ListItem } from "./ListItem";
 
 interface Props {
   results: FilteredResult[];
+  query: string;
 }
 
-export const List = ({ results }: Props) => {
+export const List = ({ results, query }: Props) => {
   const [selected, setSelected] = useState<number>(0);
   const [isMouseHover, setIsMouseHover] = useState(false);
 
@@ -63,6 +64,7 @@ export const List = ({ results }: Props) => {
             result={result}
             selected={selected == index}
             selectionCallBack={() => setSelected(index)}
+            query={query}
             key={result.id}
           />
         );
