@@ -26,7 +26,7 @@ function App() {
   if (filteredResult.length === 0) {
     queryResult = <NoResults />;
   } else {
-    queryResult = <List results={filteredResult} />;
+    queryResult = <List results={filteredResult} query={query} />;
   }
   return (
     <>
