@@ -7,6 +7,22 @@ interface Props {
   query: string;
 }
 
+function removePointer() {
+  document.body.style.cursor = "none";
+  const list: HTMLElement | null = document.querySelector(".results-list");
+  if (list) {
+    list.style.pointerEvents = "none";
+  }
+}
+
+function restorePointer() {
+  document.body.style.cursor = "";
+  const list: HTMLElement | null = document.querySelector(".results-list");
+  if (list) {
+    list.style.pointerEvents = "";
+  }
+}
+
 export const List = ({ results, query }: Props) => {
   const [selected, setSelected] = useState<number>(0);
   const [isMouseHover, setIsMouseHover] = useState(false);
@@ -14,7 +30,7 @@ export const List = ({ results, query }: Props) => {
 
   useEffect(() => {
     // restore pointer visibility
-    document.body.style.cursor = "";
+    restorePointer();
     // restore scroll to top
     listRef.current?.children[0]?.scrollIntoView({
       behavior: "smooth",
@@ -26,10 +42,7 @@ export const List = ({ results, query }: Props) => {
 
   useEffect(() => {
     const handler = (e) => {
-      if (isMouseHover) {
-        // hide cursor when hover and navigating via keyboard
-        document.body.style.cursor = "none";
-      }
+      removePointer();
 
       let newIndex = selected;
       if (e.key === "ArrowDown") {
@@ -62,27 +75,27 @@ export const List = ({ results, query }: Props) => {
 
   return (
     <div
-      className="results-list"
-      ref={listRef}
       onMouseOver={() => {
         setIsMouseHover(true);
       }}
-      onMouseOut={() => {
+      onMouseLeave={() => {
         setIsMouseHover(false);
-        document.body.style.cursor = "";
+        restorePointer();
       }}
     >
-      {results.map((result, index) => {
-        return (
-          <ListItem
-            result={result}
-            selected={selected == index}
-            selectionCallBack={() => setSelected(index)}
-            query={query}
-            key={result.id}
-          />
-        );
-      })}
+      <div className="results-list" ref={listRef}>
+        {results.map((result, index) => {
+          return (
+            <ListItem
+              result={result}
+              selected={selected == index}
+              selectionCallBack={() => setSelected(index)}
+              query={query}
+              key={result.id}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
